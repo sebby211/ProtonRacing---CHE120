@@ -262,13 +262,13 @@ def main(): #
                             else:
                                 return False #N.L - Otherwise, return False if the conditions are not met 
                       
-                        def render_objects(lap, moved, start_time): 
-                            screen.blit(track_image, (0, 0)) 
-                            Car.update_image(n, math, pygame)
+                        def render_objects(lap, moved, start_time): JV: Function which renders all objects that are displayed on the screen
+                            screen.blit(track_image, (0, 0)) #JV: Blits the image of the track to the screen
+                            Car.update_image(n, math, pygame) #JV: Uses a car method to update the current image of the car on the screen
                             a = display_timer(n, lap, moved, start_time) #JV: n is the car object, lap is the current lap, moved is whether the car has moved
                             lap = a #JV: Sets lap to return of display_timer to see if lap has changed
                             pygame.display.update() #JV: Prints to screen all rendered/blitted stuff throughout the code
-                            return lap #Returns lap for running throughout the loop
+                            return lap #JV: Returns lap for running throughout the loop
                             
 
                         def run_game(lap, carobject): 
