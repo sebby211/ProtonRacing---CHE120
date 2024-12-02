@@ -2,7 +2,7 @@ import pygame
 import sys 
 import time 
 import math 
-
+#hi 
 pygame.init()  
 
 screen = pygame.display.set_mode((1280, 720))
