@@ -221,32 +221,30 @@ def draw_menu(selected_option):
 def main(): #
     global music_playing  
 
-    selected_option = 0
+    selected_option = 0 
     clock = pygame.time.Clock()
     
-    pygame.mixer.init()
-    l_font.render(option, True, colour) # SC: Set a variable text by using PyGame render function (previously talked about)
-        screen.blit(tex
-    pygame.mixer.music.load('backgroundmusictest.mp3')  
-    pygame.mixer.music.play(-1, 0.0)  
+    pygame.mixer.init() #N.L - Opens/initializes PyGame's mixer, which is responsible for the music playing and sound effects
+    pygame.mixer.music.load('backgroundmusictest.mp3') #N.L - Uses the music.load function in PyGame to load the mp3 file which contains the background music
+    pygame.mixer.music.play(-1, 0.0) #N.L - Plays the mp3 file background music, the -1 allows an infinite looping of the file, and makes sure it starts at 0.0 seconds
     lap = 0
     while True: 
-        for event in pygame.event.get(): 
+        for event in pygame.event.get(): #N.L - Checks for each action/event that occurs using PyGame's event.get function 
     
-            if event.type == pygame.QUIT: 
-                pygame.quit()
-                sys.exit()
+            if event.type == pygame.QUIT: #N.L - If the event/action that occurs is the "X" at the corner of the window, then...
+                pygame.quit() #N.L - Close PyGame
+                sys.exit() #N.L - It will close the program and closes everything properly 
 
-            if event.type == pygame.KEYDOWN: 
-                if event.key == pygame.K_w: 
-                    selected_option = (selected_option - 1) % len(menu_options) 
+            if event.type == pygame.KEYDOWN: #N.L - If the user hits a key on the keyboard, then...
+                if event.key == pygame.K_w: #N.L - If the user hits the "w" key, then...
+                    selected_option = selected_option - 1 #N.L - Make the selected_option index go down one value, since you are then going up in the positions (aka moving up the menu options)
 
-                if event.key == pygame.K_s: 
-                    selected_option = (selected_option + 1) % len(menu_options)
+                if event.key == pygame.K_s: #N.L - If the user hits the "s" key, then...
+                    selected_option = selected_option + 1 #N.L - Make the selected_option index go up one value, since you are then going down in the positions (aka moving down the menu options)
 
-                if event.key == pygame.K_RETURN: 
-                    if selected_option == 0: 
-                        start_count_down() 
+                if event.key == pygame.K_RETURN: #N.L - If the user hits "Enter" on the keyboard then...
+                    if selected_option == 0: #N.L - If the user hits this while on the Play button (selected_option = 0), then...
+                        start_count_down() #N.L - Call the start_count_down function, which has already been defined above 
 
                      
                         def is_on_track(n): #N.L - Function definition, defines what the track is based on pixel colour
