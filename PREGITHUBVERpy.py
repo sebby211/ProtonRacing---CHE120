@@ -1,40 +1,41 @@
-import pygame 
-import sys 
-import time 
-import math 
+import pygame #AS: Imports all of the available pygame modules into the program
+import sys #AS: Imports the sys module
+import time #AS: Imports the time module
+import math #AS: Imports math module
 #hi 
-pygame.init()  
+pygame.init() #AS: Used to avoid any issues related to uninitalized modules by ensuring pygame modules function correctly within the program 
 
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((1280, 720)) #AS: Sets up the main window using the parameters of the given width and height tuple
 
-BLACK = (0, 0, 0) 
+BLACK = (0, 0, 0) #AS: All of these set variables(colours) are set to defined RGB models as tuple values 
 WHITE = (255, 255, 255)  
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 
-font = pygame.font.Font('supfont.ttf', 90)  
-small_font = pygame.font.Font('supfont.ttf', 50) 
+font = pygame.font.Font('supfont.ttf', 90) #AS: The variable is set to a function with the parameters of a given TrueType file and size (this will be the larger sized font)
+ 
+small_font = pygame.font.Font('supfont.ttf', 50) #AS: The variable is set to a function with the parameters of a given TrueType file and size (this will be the smaller sized font)
 
-menu_options = ["Start Game", "Audio", "Quit"] 
-pause_screen_options = ["Resume", "Quit"] 
-music_playing = True  
+menu_options = ["Start Game", "Audio", "Quit"] #AS: Establishes a variable name with a list of string values to be used in the main menu screen
+pause_screen_options = ["Resume", "Quit"] #AS: Establishes a variable name with a list of string values to be used in the pause menu screen
+music_playing = True  #AS: Sets this to be true when game opens (basically, it allows this to start off true, and then set to false later)
 
-speaker_on_image = pygame.image.load('speaker_on.png') 
-speaker_off_image = pygame.image.load('speaker_off.png') 
-speaker_on_image = pygame.transform.scale(speaker_on_image, (50,50)) 
-speaker_off_image = pygame.transform.scale(speaker_off_image, (50,50))
-speaker_icon_x = 800  
-speaker_icon_y = 205  
+speaker_on_image = pygame.image.load('speaker_on.png') #AS: Sets the variable to load an image file by creating a surface object from the given png file (used as the audio on the speaker)
+speaker_off_image = pygame.image.load('speaker_off.png') #AS: Also sets the variable to load an image file by creating a surface object from the given png file (used as the audio mute speaker)
+speaker_on_image = pygame.transform.scale(speaker_on_image, (50,50)) #AS: These two functions rescale the previously loaded images by calling the surface objects and the desired tuple size as arguments
+speaker_off_image = pygame.transform.scale(speaker_off_image, (50,50)) 
+speaker_icon_x = 800  #AS: Establishes the x-coordinate for placing the speaker icon
+speaker_icon_y = 205  #AS: Establishes the y-coordinate for placing the speaker icon
 
-track_image = pygame.image.load('tracknew.png') 
-car_image = pygame.image.load('carnew.png') 
-track_image = pygame.transform.scale(track_image, (1280, 720)) 
-track_pixels = pygame.surfarray.array3d(track_image) 
-track_colour = (84, 84, 84) 
-screen = pygame.display.set_mode((track_image.get_width(), track_image.get_height())) 
-car_x, car_y = 968, 225  
+track_image = pygame.image.load('tracknew.png') #AS: Loads the given png file into the program by creating a surface object
+car_image = pygame.image.load('carnew.png') #AS: Also loads the given png file into the program by creating a surface object
+track_image = pygame.transform.scale(track_image, (1280, 720)) #AS: Rescales the surface object 'track_image' using the given tuple size 
+track_pixels = pygame.surfarray.array3d(track_image) #AS: Creates an array of pixels that defines the pixels that make-up the track
+track_colour = (84, 84, 84) #AS: Defines the track colour using RGB|values, in this case it is a shade of grey, and is important for track definition
+screen = pygame.display.set_mode((track_image.get_width(), track_image.get_height())) #AS: Defines the boundaries of the screen with the image of the track screen (ensures no black space)
+car_x, car_y = 968, 225  #AS: Establishes the car's initial starting position when the game is run as a tuple 
 
-crash_sound = pygame.mixer.Sound('gameoversoundeffect.mp3') 
+crash_sound = pygame.mixer.Sound('gameoversoundeffect.mp3') #AS: Defines the crash sound using pygame's mixer.Sound class and an imported mp3 file
 start_time = None
 
 class Car:
@@ -70,13 +71,13 @@ class Car:
 n = Car(pygame)
 
 def start_count_down():
-    count_down_messages = ["3", "2", "1", "Go!"]
-    for number in count_down_messages:
-        screen.blit(track_image, (0, 0))  
-        text = font.render(number, True, WHITE)  
-        screen.blit(text, (600,325)) 
-        pygame.display.update()  
-        time.sleep(1)  
+    count_down_messages = ["3", "2", "1", "Go!"] #AS: A homogenous string list is defined as to a variable name (this list includes the text that will show on the screen during the countdown)
+    for number in count_down_messages: #AS: Consists of a for loop that goes through each item within the list
+        screen.blit(track_image, (0, 0)) #AS: This will display the track image through each iteration 
+        text = font.render(number, True, WHITE) #AS: Here a variable is set to a specific font (font was established earlier in the program), and the established tuple, WHITE. The eterated values are to be set as arguments within the render function as well.  
+        screen.blit(text, (600,325)) #AS: This allows the text variable above to be postioned and surfaced onto the screen, using a specific position tuple as an argment.
+        pygame.display.update() #AS: Updates the display every iteration. 
+        time.sleep(1) #AS: Pauses the loop for a second between each iteration, allowing the coundown to flow smoothly. 
 global times_list
 times_list = [0]   
 
@@ -204,11 +205,11 @@ def draw_menu(selected_option):
         
         i += 1 
 
-    if music_playing: 
-        screen.blit(speaker_on_image, (speaker_icon_x, speaker_icon_y)) 
-    else:
-        screen.blit(speaker_off_image, (speaker_icon_x, speaker_icon_y)) 
-    pygame.display.update() 
+    if music_playing: #AS: Set as a boolean, (aka if True)
+        screen.blit(speaker_on_image, (speaker_icon_x, speaker_icon_y)) #AS: Blit image on screen, make a speaker_on png to appear with a respective position
+    else: #AS: aka False
+        screen.blit(speaker_off_image, (speaker_icon_x, speaker_icon_y)) #AS: Blit image on screen, make a speaker_off png to appear with a respective position 
+    pygame.display.update() #AS: Update the screen with the draw_menu variables and text, etc. 
 
 def main():
     global music_playing  
