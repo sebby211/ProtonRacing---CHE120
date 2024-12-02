@@ -248,9 +248,9 @@ def main(): #
 
                      
                         def is_on_track(n): #N.L - Function definition, defines what the track is based on pixel colour
-                            x, y = n.position #N.L - The position of the car is the x,y tuple 
-                            x = int(x) #N.L - Pygame requires a vector position, but needs to be used as a position, to determine on track, so convert to an integer
-                            y = int(y) #N.L - Same reason as above (line 245)
+                            x, y = n.position #JV: the position of the car is the x,y tuple 
+                            x = int(x) #JV: pygame requires a vector position, but needs to be used as a position, to determine on track, so convert to an integer
+                            y = int(y) #JV: same reason as above 
                         
                             width = track_pixels.shape[0] #N.L - As defined in the beginning of the code, track_pixels was defined as an arary, hence by using shape[0], its accessing the columns of the arary (which is the width)
                             height = track_pixels.shape[1] #N.L - As defined in the beginning of the code, track_pixels was defined as an arary, hence by using shape[1], its accessing the rows of the arary (which is the height)
