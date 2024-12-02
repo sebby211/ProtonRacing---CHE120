@@ -125,9 +125,9 @@ def pause_menu():
         for event in pygame.event.get(): # SC: Acts as a for loop within the while paused loop, in short --> checks for inputs from the player
             if event.type == pygame.KEYDOWN: # SC: Only computes for keyboard inputs
                 if event.key == pygame.K_w: # SC: If the player presses the 'w' key...
-                    selected_option = (selected_option - 1) % 3 # SC: If the w key is pressed, the selected option will move up (purpose of outputing the remainder value between 3 (the len of options) allows players to go from the top selection to the bottom using 'w' for example).
+                    selected_option = selected_option - 1 # SC: If the w key is pressed, the selected option will move up 
                 elif event.key == pygame.K_s:  # SC: If the player presses on the 's' key...
-                    selected_option = (selected_option + 1) % 3 # SC: If the s key is pressed, the selected option will move down. 
+                    selected_option = selected_option + 1 # SC: If the s key is pressed, the selected option will move down. 
                 elif event.key == pygame.K_RETURN: # SC: If the player presses on the 'return' or 'enter' key...
                     if selected_option == 0:  # SC: If the player hits the "Resume" value, paused value is set to False, removing the surfaced pause menu screen and returning back to the game.
                         paused = False
@@ -206,8 +206,9 @@ def draw_menu(selected_option):
                 option = "Audio: On"  # SC: If option in the for loop is 1, for example, it will make it equal to "Audio: On" 
             else:
                 option = "Audio: Off"   # SC: If option in the for loop is 2, for example, it will make it equal to "Audio: Off"  
-                
-        text = smalt, (460, menu_option_y_positions[i]))  # SC: Make the text appear on screen by blitting, and the i iteration makes each option i (Play, Audio, Quit) appear on screen with a given position (defined the list above)
+             
+        text = small_font.render(option, True, colour) 
+        screen.blit(text, (460, menu_option_y_positions[i]))  # SC: Make the text appear on screen by blitting, and the i iteration makes each option i (Play, Audio, Quit) appear on screen with a given position (defined the list above)
         
         i += 1 # SC: Mentioned above
 
