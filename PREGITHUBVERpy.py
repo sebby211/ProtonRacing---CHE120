@@ -211,13 +211,6 @@ def draw_menu(selected_option):
         
         i += 1 # SC: Mentioned above
 
- 
-    if music_playing: 
-        screen.blit(speaker_on_image, (speaker_icon_x, speaker_icon_y)) 
-    else:
-        screen.blit(speaker_off_image, (speaker_icon_x, speaker_icon_y)) # 
-    pygame.display.update()  
-
     if music_playing: # SC: Set as a boolean, (aka if True)
         screen.blit(speaker_on_image, (speaker_icon_x, speaker_icon_y)) # SC: Blit image on screen, make a speaker_on png to appear with a respective position
     else: # SC: aka if False
