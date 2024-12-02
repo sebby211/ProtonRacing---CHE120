@@ -109,46 +109,46 @@ def display_timer(carobject, lap, moved, start_time):
         screen.blit(best_text, (790, 50))
         return lap, moved, start_time
         
-pause_menu_option_y_positions = [360, 420]
+pause_menu_option_y_positions = [360, 420] # SC: Provided a list with two different y positions for the pause menu options, and will be accessed throughout the pause menu function. 
 
 def pause_menu():
-    selected_option = 0 
-    paused = True 
+    selected_option = 0  # SC: Initalizes the selected option on 0 (in this case it would be Resume)
+    paused = True # SC: If true, runs the while loop below
     while paused:
-        for event in pygame.event.get(): 
-            if event.type == pygame.KEYDOWN: 
-                if event.key == pygame.K_w: 
-                    selected_option = (selected_option - 1) % 3 
-                elif event.key == pygame.K_s: 
-                    selected_option = (selected_option + 1) % 3 
-                elif event.key == pygame.K_RETURN: 
-                    if selected_option == 0: 
+        for event in pygame.event.get(): # SC: Acts as a for loop within the while paused loop, in short --> checks for inputs from the player
+            if event.type == pygame.KEYDOWN: # SC: Only computes for keyboard inputs
+                if event.key == pygame.K_w: # SC: If the player presses the 'w' key...
+                    selected_option = (selected_option - 1) % 3 # SC: If the w key is pressed, the selected option will move up (purpose of outputing the remainder value between 3 (the len of options) allows players to go from the top selection to the bottom using 'w' for example).
+                elif event.key == pygame.K_s:  # SC: If the player presses on the 's' key...
+                    selected_option = (selected_option + 1) % 3 # SC: If the s key is pressed, the selected option will move down. 
+                elif event.key == pygame.K_RETURN: # SC: If the player presses on the 'return' or 'enter' key...
+                    if selected_option == 0:  # SC: If the player hits the "Resume" value, paused value is set to False, removing the surfaced pause menu screen and returning back to the game.
                         paused = False
-                    elif selected_option == 1: 
+                    elif selected_option == 1: # SC: If the player hits the "Quit" value, the program shuts down, exiting out of the game. 
                         pygame.quit()
                         sys.exit()
 
-        pause_menu_image = pygame.image.load('pausemenuimage.png') 
-        pause_menu_image = pygame.transform.scale(pause_menu_image, (1280, 720)) 
-        screen.blit(pause_menu_image, (0,0)) 
-        title = font.render("Paused", True, WHITE) 
-        screen.blit(title, (455, 240)) 
+        pause_menu_image = pygame.image.load('pausemenuimage.png') # SC: This loads the pause menu background image, initially provided as a png file. 
+        pause_menu_image = pygame.transform.scale(pause_menu_image, (1280, 720)) # SC: This transforms the loaded surface object (the background image) and transforms it into specified dimensions. 
+        screen.blit(pause_menu_image, (0,0))  # SC: Displays the background image into the screen
+        title = font.render("Paused", True, WHITE) # SC: Defines a variable to the string value and makes it white.
+        screen.blit(title, (455, 240))  # SC: Positions and displays the title onto the paused screen. 
         
-        i = 0 
-        for option in pause_screen_options: 
-            if i == selected_option: 
-                if i == 0: 
+        i = 0 # SC: Initalizes the variable i as 0 outside of the loop below.
+        for option in pause_screen_options: # SC: A for loop that goes through the pause_screen_options list
+            if i == selected_option: # SC: If the player is on a selected option, the option will be displayed as a defined colour. 
+                if i == 0: # SC: If the player is on "Resume" the text will appear green.
                     colour = GREEN
-                elif i == 1: 
+                elif i == 1: # SC: If the player is on "Quit" the text will appear red. 
                     colour = RED
-            else: 
+            else: # SC: Every other option that is not being selected at that point in time will be displayed as white. 
                 colour = WHITE 
-            text = small_font.render(option, True, colour) 
-            screen.blit(text, (540, pause_menu_option_y_positions[i])) 
+            text = small_font.render(option, True, colour) # SC: Defines the text to be a specific font and colour.
+            screen.blit(text, (540, pause_menu_option_y_positions[i])) # SC: Displays the changes to the text using specified positions.
             
-            i += 1 
+            i += 1  # SC: Iterioate current value of iterates.
             
-        pygame.display.update() 
+        pygame.display.update() # SC: Updates the display every iteration.
         
 gameover_menu_option_y_positions = [150, 210, 270]
         
@@ -178,37 +178,36 @@ def gameover_menu():
 
 menu_option_y_positions = [150, 210, 270] 
 def draw_menu(selected_option):
-    background_image = pygame.image.load('test10car.png') 
-    background_image = pygame.transform.scale(background_image, (1280,720)) 
-    screen.blit(background_image, (0, 0))  
-    title = font.render("Proton Racing", True, WHITE) 
-    screen.blit(title, (250, 50))   
-
-    i = 0 
-    for option in menu_options:
-        if i == selected_option:   
-            if i == 2: 
+    background_image = pygame.image.load('test10car.png') # SC: Sets the background image of the main menu through the loading of a png file (by creating the png into a usable surface object).
+    background_image = pygame.transform.scale(background_image, (1280,720)) #SC: Tranforms the background image to specified dimensions.
+    screen.blit(background_image, (0, 0))  #SC: Displays the background image.
+    title = font.render("Proton Racing", True, WHITE) # SC: Renders the title of the game in a white colour and specific font (*not mentioned in other render functions --> True boolian argument allows for antialias; smoothes the edges of images and reduces distortion).
+    screen.blit(title, (250, 50)) #SC: Displays the title at specified positioning.
+    i = 0 # SC: Initalizes the variable i as 0 outside of the loop below.
+    for option in menu_options: # SC: A for loop that goes through the menu_options list.
+        if i == selected_option: # SC: If the player is on a selected option, the option will be displayed as a defined colour. 
+            if i == 2: # SC: If the player is on the option "Quit" then the text will turn red.
                 colour = RED
-            else: 
+            else: # SC: If the player is on any other option the text will turn green.
                 colour = GREEN 
-        else: 
+        else: # SC: Any other options (that the player is not on), will appear white. 
             colour = WHITE
-        if option == "Audio": 
-            if music_playing: 
-                option = "Audio: On" 
+        if option == "Audio": # SC: In the for loop, if the user selects "Audio" in the list of menu options, then ...
+            if music_playing: # SC: Check if music_playing boolean is true (aka if True)
+                option = "Audio: On"  # SC: If option in the for loop is 1, for example, it will make it equal to "Audio: On" 
             else:
-                option = "Audio: Off"   
+                option = "Audio: Off"   # SC: If option in the for loop is 2, for example, it will make it equal to "Audio: Off"  
                 
-        text = small_font.render(option, True, colour) 
-        screen.blit(text, (460, menu_option_y_positions[i])) 
+        text = small_font.render(option, True, colour) # SC: Set a variable text by using PyGame render function (previously talked about)
+        screen.blit(text, (460, menu_option_y_positions[i]))  # SC: Make the text appear on screen by blitting, and the i iteration makes each option i (Play, Audio, Quit) appear on screen with a given position (defined the list above)
         
-        i += 1 
+        i += 1 # SC: Mentioned above
 
-    if music_playing: 
-        screen.blit(speaker_on_image, (speaker_icon_x, speaker_icon_y)) 
-    else:
-        screen.blit(speaker_off_image, (speaker_icon_x, speaker_icon_y)) 
-    pygame.display.update() 
+    if music_playing: # SC: Set as a boolean, (aka if True)
+        screen.blit(speaker_on_image, (speaker_icon_x, speaker_icon_y)) # SC: Blit image on screen, make a speaker_on png to appear with a respective position
+    else: # SC: aka if False
+        screen.blit(speaker_off_image, (speaker_icon_x, speaker_icon_y)) # SC: Blit image on screen, make a speaker_off png to appear with a respective position
+    pygame.display.update() # SC: Update the screen with the draw_menu variables and text, etc. 
 
 def main():
     global music_playing  
