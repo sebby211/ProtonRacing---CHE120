@@ -50,7 +50,7 @@ class Car: #JV: Initializes a car class which can be used to create car objects
         self.velocity = 0 #JV: Velocity of car at different times, starts at 0 because car doesn't move
         self.acceleration = 0.006 #JV: The rate that the velocity goes up per tick of the code, many ticks per second so value is very small
         self.rotation = 0 #JV: Current angle relative to horizontal of the car
-        self.cornering = 0.4 #JV: Amount the cars rotation can change per tick, in degrees.
+        self.cornering = 0.5 #JV: Amount the cars rotation can change per tick, in degrees.
         self.topspeed = 2 #JV: Maximum speed the car can hit
 
     #JV: Note: Code did not behave as expected initially because when I wrote it in my environment, point (0,0) was bottom left
