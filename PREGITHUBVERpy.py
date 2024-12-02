@@ -183,7 +183,7 @@ def gameover_menu(): #N.L - A function that draws and codes functionality of the
         pygame.display.update() #N.L - Call this function to ensure that when this appears, make the display of the game update such as blits (ensures everything is up-to-date in a sense)
         
 
-menu_option_y_positions = [150, 210, 270] 
+menu_option_y_positions = [150, 210, 270] # SC: Provided a list with three different y positions for the pause menu options, and will be accessed throughout the main menu function. 
 
 def draw_menu(selected_option):
     background_image = pygame.image.load('test10car.png') # SC: Sets the background image of the main menu through the loading of a png file (by creating the png into a usable surface object).
@@ -211,13 +211,6 @@ def draw_menu(selected_option):
         screen.blit(text, (460, menu_option_y_positions[i]))  # SC: Make the text appear on screen by blitting, and the i iteration makes each option i (Play, Audio, Quit) appear on screen with a given position (defined the list above)
         
         i += 1 # SC: Mentioned above
-
- 
-    if music_playing: 
-        screen.blit(speaker_on_image, (speaker_icon_x, speaker_icon_y)) 
-    else:
-        screen.blit(speaker_off_image, (speaker_icon_x, speaker_icon_y)) # 
-    pygame.display.update()  
 
     if music_playing: # SC: Set as a boolean, (aka if True)
         screen.blit(speaker_on_image, (speaker_icon_x, speaker_icon_y)) # SC: Blit image on screen, make a speaker_on png to appear with a respective position
