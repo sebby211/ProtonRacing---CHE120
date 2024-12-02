@@ -1,9 +1,11 @@
+
 import pygame #AS: Imports all of the available pygame modules into the program
 import sys #AS: Imports the sys module
 import time #AS: Imports the time module
 import math #AS: Imports math module
-#hi 
+ 
 pygame.init() #AS: Used to avoid any issues related to uninitalized modules by ensuring pygame modules function correctly within the program 
+
 
 screen = pygame.display.set_mode((1280, 720)) #AS: Sets up the main window using the parameters of the given width and height tuple
 
@@ -153,35 +155,50 @@ def pause_menu():
             
             i += 1  # SC: Iterioate current value of iterates.
             
-        pygame.display.update() # SC: Updates the display every iteration.
-        
-gameover_menu_option_y_positions = [150, 210, 270]
-        
-def gameover_menu():
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:
-                        pygame.quit()
-                        sys.exit()
-        
-        background_image = pygame.image.load('demo_car.png')
-        background_image = pygame.transform.scale(background_image, (1280, 720))
-        screen.blit(background_image, (0, 0))
 
-        title = font.render("Game Over", True, RED)
-        screen.blit(title, (330, 50)) 
+        pygame.display.update() 
+         
+def gameover_menu(): #N.L - A function that draws and codes functionality of the gameover screen, and has no arguments since it just needs to be called to show up 
+    while True: #N.L - A while loop to make these things occur over and over again while the condition is True 
+        for event in pygame.event.get(): #N.L - Pygame function that essentially checks all events that have occured, saying that for each "action" or event that happens, do...
+            if event.type == pygame.QUIT: #N.L - If the user hits the "X" aka the close button on the window, it detects this and then...
+                pygame.quit() #N.L - It will close PyGame, since we iniitalized it in the beginning it needs to be quit
+                sys.exit() #N.L - It will close the program and closes everything properly 
+            if event.type == pygame.KEYDOWN: #N.L - If a key on the keyboard is pressed (regardless of what it is), then...
+                    if event.key == pygame.K_RETURN: #N.L - If the key pressed was "Enter" or "Return", then it will...
+                        pygame.quit() #N.L - It will close PyGame, since we iniitalized it in the beginning it needs to be quit
+                        sys.exit() #N.L - It will close the program and closes everything properly so when the user hits enter on the "Quit" button (defined below), it will close
+
+        pygame.display.update() # SC: Updates the display every iteration.
+
+        
+        background_image = pygame.image.load('demo_car.png') #N.L - Load the image, which in this case is the gameover "car crash" picture using PyGame's image load function
+        background_image = pygame.transform.scale(background_image, (1280, 720)) #N.L - Uses PyGame's scaling functionality to make the image fit the screen properly 
+        screen.blit(background_image, (0, 0)) #N.L - Make the image appear on the screen at (0,0), which just makes the image that is 1280 x 720 fit it properly
+
+        title = font.render("Game Over", True, RED) #N.L - Makes the title text using PyGame's render function, which just makes "Game Over" appear in red 
+        screen.blit(title, (330, 50)) #N.L - Makes the text appear on screen using PyGame's blit function, which its respective positioning coordinates
                      
-        text = small_font.render("Quit", True, GREEN) 
-        screen.blit(text, (550, 200))
+        text = small_font.render("Quit", True, GREEN) #N.L - Makes the quit button appear in green using PyGame's render function with the previously defined small_font
+        screen.blit(text, (550, 200)) #N.L - Makes the text appear on screen using PyGame's blit function, which its respective positioning coordinates
             
-        pygame.display.update()
+        pygame.display.update() #N.L - Call this function to ensure that when this appears, make the display of the game update such as blits (ensures everything is up-to-date in a sense)
         
 
 menu_option_y_positions = [150, 210, 270] 
+
+def draw_menu(selected_option): 
+    background_image = pygame.image.load('test10car.png') 
+    background_image = pygame.transform.scale(background_image, (1280,720)) 
+    screen.blit(background_image, (0, 0))  
+    title = font.render("Proton Racing", True, WHITE) 
+    screen.blit(title, (250, 50))   
+
+    i = 0 
+    for option in menu_options:
+        if i == selected_option:   
+            if i == 2: 
+
 def draw_menu(selected_option):
     background_image = pygame.image.load('test10car.png') # SC: Sets the background image of the main menu through the loading of a png file (by creating the png into a usable surface object).
     background_image = pygame.transform.scale(background_image, (1280,720)) #SC: Tranforms the background image to specified dimensions.
@@ -192,6 +209,7 @@ def draw_menu(selected_option):
     for option in menu_options: # SC: A for loop that goes through the menu_options list.
         if i == selected_option: # SC: If the player is on a selected option, the option will be displayed as a defined colour. 
             if i == 2: # SC: If the player is on the option "Quit" then the text will turn red.
+
                 colour = RED
             else: # SC: If the player is on any other option the text will turn green.
                 colour = GREEN 
@@ -252,23 +270,21 @@ def main():
                         start_count_down() 
 
                      
-                        def is_on_track(n): 
-                            x, y = n.position
-                            x = int(x)
-                            y = int(y)
+                        def is_on_track(n): #N.L - Function definition, defines what the track is based on pixel colour
+                            x, y = n.position #N.L - The position of the car is the x,y tuple 
+                            x = int(x) #N.L - Pygame requires a vector position, but needs to be used as a position, to determine on track, so convert to an integer
+                            y = int(y) #N.L - Same reason as above (line 245)
                         
-                            width = track_pixels.shape[0] 
-                            height = track_pixels.shape[1]
-                            pixel_colour = track_pixels[x, y]
-                            if 0 <= x < width and 0 <= y < height and tuple(pixel_colour) == track_colour:
-                            
-                                return True 
+                            width = track_pixels.shape[0] #N.L - As defined in the beginning of the code, track_pixels was defined as an arary, hence by using shape[0], its accessing the columns of the arary (which is the width)
+                            height = track_pixels.shape[1] #N.L - As defined in the beginning of the code, track_pixels was defined as an arary, hence by using shape[1], its accessing the rows of the arary (which is the height)
+                            pixel_colour = track_pixels[x, y]  #N.L - Establish a pixel_colour variable as a tuple of x,y positions (which is why x and y needed to be coverted to int
+                            if 0 <= x < width and 0 <= y < height and tuple(pixel_colour) == track_colour: #N.L - Checks if on track by making sure the car's x and y positions are in the array of pixels and that they match the colour of the track  
+                                return True #N.L - If it does satisfy these conditions, then return True obviously
                             else:
-                                return False 
+                                return False #N.L - Otherwise, return False if the conditions are not met 
                       
                         def render_objects(lap, moved, start_time): 
                             screen.blit(track_image, (0, 0)) 
-                           
                             Car.update_image(n, math, pygame)
                             a = display_timer(n, lap, moved, start_time) #JV: n is the car object, lap is the current lap, moved is whether the car has moved
                             lap = a #JV: Sets lap to return of display_timer to see if lap has changed
