@@ -303,7 +303,7 @@ def main(): #
                                 if int(x) < 1000 or int(x) > 1150 and int(y) != 350: #JV: Sees if the car has moved
                                     moved = True #JV: Car has moved, so set moved = True
                                 
-                                if is_on_track(n) == False #N.L - Checks if the conditions for the is_on_track function are satisfied, if they are not (aka off the tracK), then...
+                                if is_on_track(n) == False: #N.L - Checks if the conditions for the is_on_track function are satisfied, if they are not (aka off the tracK), then...
                                     crash_sound.play() #N.L - Play the crash sound, which has been loaded previously 
                                     pygame.mixer.music.stop() #N.L - Stop the background music 
                                     game_running = False #N.L - Set the game_running variable to False, which is a way of indirectly breaking the game loop 
