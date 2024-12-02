@@ -218,7 +218,7 @@ def draw_menu(selected_option):
     pygame.display.update() # SC: Update the screen with the draw_menu variables and text, etc. 
 
 
-def main():
+def main(): #
     global music_playing  
 
     selected_option = 0
@@ -304,36 +304,35 @@ def main():
                                 if int(x) < 1000 or int(x) > 1150 and int(y) != 350: #JV: Sees if the car has moved
                                     moved = True #JV: Car has moved, so set moved = True
                                 
-                                if not is_on_track(n):
-                                    crash_sound.play()
-                                    pygame.mixer.music.stop() 
-                                    game_running = False 
-                                    gameover_menu()
+                                if is_on_track(n) == False #N.L - Checks if the conditions for the is_on_track function are satisfied, if they are not (aka off the tracK), then...
+                                    crash_sound.play() #N.L - Play the crash sound, which has been loaded previously 
+                                    pygame.mixer.music.stop() #N.L - Stop the background music 
+                                    game_running = False #N.L - Set the game_running variable to False, which is a way of indirectly breaking the game loop 
+                                    gameover_menu() #N.L - Calls the game over menu, which contains the functionality and the menu screen drawing 
                                 
                                 lap, moved, start_time = render_objects(lap, moved, start_time) #JV: Passes in lap, moved, and start_time, and will return them if they have changed
                                 
-                                pygame.display.flip() 
+                                pygame.display.update() #N.L - Updates the current display when the run_game function is called 
                                 
-                            pygame.quit() 
-                            sys.exit() 
+                           
                             return lap
                         
                         run_game(lap, n)
 
-                    elif selected_option == 1: 
-                        if music_playing: 
-                            pygame.mixer.music.stop() 
-                            music_playing = False 
+                    elif selected_option == 1: #N.L - If the user is hits the second button (Audio button), then...
+                        if music_playing: #N.L - Previously, the music_playing variable was iniitalized as True, so if the music is already playing then...
+                            pygame.mixer.music.stop() #N.L - Stop the music 
+                            music_playing = False #N.L - Since the music isn't playing anymore, set the variable to False
                         else: 
-                            pygame.mixer.music.play(-1, 0.0)  
-                            music_playing = True 
+                            pygame.mixer.music.play(-1, 0.0)  #N.L - If it is not playing already, then start the music by infinitely looping it and starting at 0.0 seconds
+                            music_playing = True #N.L - Set the music playing variable to be True since music is now playing
 
-                    elif selected_option == 2:  
-                        pygame.quit() 
-                        sys.exit() 
+                    elif selected_option == 2:  #N.L - If the user selects the third button on the menu screen (Quit), then...
+                        pygame.quit() #N.L - Quit Pygame
+                        sys.exit() #N.L - Properly close the execution of the code 
 
-        draw_menu(selected_option) 
-        clock.tick(60)
+        draw_menu(selected_option) #N.L - Calls the draw_menu function with the argument of the respective selected_option, which draws and applies the functionality of the menu screen
+        clock.tick(60) #N.L - Sets the frame rate to be 60 frames per second (60 fps), using PyGame's clock.tick function 
 
 if __name__ == "__main__":
     main()
