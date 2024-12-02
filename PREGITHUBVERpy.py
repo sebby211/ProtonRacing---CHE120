@@ -169,8 +169,6 @@ def gameover_menu(): #N.L - A function that draws and codes functionality of the
                         pygame.quit() #N.L - It will close PyGame, since we iniitalized it in the beginning it needs to be quit
                         sys.exit() #N.L - It will close the program and closes everything properly so when the user hits enter on the "Quit" button (defined below), it will close
 
-        pygame.display.update() # SC: Updates the display every iteration.
-
         
         background_image = pygame.image.load('demo_car.png') #N.L - Load the image, which in this case is the gameover "car crash" picture using PyGame's image load function
         background_image = pygame.transform.scale(background_image, (1280, 720)) #N.L - Uses PyGame's scaling functionality to make the image fit the screen properly 
