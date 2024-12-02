@@ -3,7 +3,7 @@ import sys
 import time 
 import math 
 
-pygame.init()  
+pygame.init()  #hello
 
 screen = pygame.display.set_mode((1280, 720))
 
