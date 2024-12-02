@@ -187,18 +187,6 @@ def gameover_menu(): #N.L - A function that draws and codes functionality of the
 
 menu_option_y_positions = [150, 210, 270] 
 
-def draw_menu(selected_option): 
-    background_image = pygame.image.load('test10car.png') 
-    background_image = pygame.transform.scale(background_image, (1280,720)) 
-    screen.blit(background_image, (0, 0))  
-    title = font.render("Proton Racing", True, WHITE) 
-    screen.blit(title, (250, 50))   
-
-    i = 0 
-    for option in menu_options:
-        if i == selected_option:   
-            if i == 2: 
-
 def draw_menu(selected_option):
     background_image = pygame.image.load('test10car.png') # SC: Sets the background image of the main menu through the loading of a png file (by creating the png into a usable surface object).
     background_image = pygame.transform.scale(background_image, (1280,720)) #SC: Tranforms the background image to specified dimensions.
