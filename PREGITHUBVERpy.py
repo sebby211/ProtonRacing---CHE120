@@ -1,153 +1,161 @@
-import pygame 
-import sys 
-import time 
-import math 
 
-pygame.init()  
+import pygame #AS: Imports all of the available pygame modules into the program
+import sys #AS: Imports the sys module
+import time #AS: Imports the time module
+import math #AS: Imports math module
+ 
+pygame.init() #AS: Used to avoid any issues related to uninitalized modules by ensuring pygame modules function correctly within the program 
 
-screen = pygame.display.set_mode((1280, 720))
 
-BLACK = (0, 0, 0) 
+screen = pygame.display.set_mode((1280, 720)) #AS: Sets up the main window using the parameters of the given width and height tuple
+
+BLACK = (0, 0, 0) #AS: All of these set variables(colours) are set to defined RGB models as tuple values 
 WHITE = (255, 255, 255)  
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 
-font = pygame.font.Font('supfont.ttf', 90)  
-small_font = pygame.font.Font('supfont.ttf', 50) 
+font = pygame.font.Font('supfont.ttf', 90) #AS: The variable is set to a function with the parameters of a given TrueType file and size (this will be the larger sized font)
+ 
+small_font = pygame.font.Font('supfont.ttf', 50) #AS: The variable is set to a function with the parameters of a given TrueType file and size (this will be the smaller sized font)
 
-menu_options = ["Start Game", "Audio", "Quit"] 
-pause_screen_options = ["Resume", "Quit"] 
-music_playing = True  
+menu_options = ["Start Game", "Audio", "Quit"] #AS: Establishes a variable name with a list of string values to be used in the main menu screen
+pause_screen_options = ["Resume", "Quit"] #AS: Establishes a variable name with a list of string values to be used in the pause menu screen
+music_playing = True  #AS: Sets this to be true when game opens (basically, it allows this to start off true, and then set to false later)
 
-speaker_on_image = pygame.image.load('speaker_on.png') 
-speaker_off_image = pygame.image.load('speaker_off.png') 
-speaker_on_image = pygame.transform.scale(speaker_on_image, (50,50)) 
-speaker_off_image = pygame.transform.scale(speaker_off_image, (50,50))
-speaker_icon_x = 800  
-speaker_icon_y = 205  
+speaker_on_image = pygame.image.load('speaker_on.png') #AS: Sets the variable to load an image file by creating a surface object from the given png file (used as the audio on the speaker)
+speaker_off_image = pygame.image.load('speaker_off.png') #AS: Also sets the variable to load an image file by creating a surface object from the given png file (used as the audio mute speaker)
+speaker_on_image = pygame.transform.scale(speaker_on_image, (50,50)) #AS: These two functions rescale the previously loaded images by calling the surface objects and the desired tuple size as arguments
+speaker_off_image = pygame.transform.scale(speaker_off_image, (50,50)) 
+speaker_icon_x = 800  #AS: Establishes the x-coordinate for placing the speaker icon
+speaker_icon_y = 205  #AS: Establishes the y-coordinate for placing the speaker icon
 
-track_image = pygame.image.load('tracknew.png') 
-car_image = pygame.image.load('carnew.png') 
-track_image = pygame.transform.scale(track_image, (1280, 720)) 
-track_pixels = pygame.surfarray.array3d(track_image) 
-track_colour = (84, 84, 84) 
-screen = pygame.display.set_mode((track_image.get_width(), track_image.get_height())) 
-car_x, car_y = 968, 225  
+track_image = pygame.image.load('tracknew.png') #AS: Loads the given png file into the program by creating a surface object
+car_image = pygame.image.load('carnew.png') #AS: Also loads the given png file into the program by creating a surface object
+track_image = pygame.transform.scale(track_image, (1280, 720)) #AS: Rescales the surface object 'track_image' using the given tuple size 
+track_pixels = pygame.surfarray.array3d(track_image) #AS: Creates an array of pixels that defines the pixels that make-up the track
+track_colour = (84, 84, 84) #AS: Defines the track colour using RGB|values, in this case it is a shade of grey, and is important for track definition
+screen = pygame.display.set_mode((track_image.get_width(), track_image.get_height())) #AS: Defines the boundaries of the screen with the image of the track screen (ensures no black space)
+car_x, car_y = 968, 225  #AS: Establishes the car's initial starting position when the game is run as a tuple 
 
-crash_sound = pygame.mixer.Sound('gameoversoundeffect.mp3') 
+crash_sound = pygame.mixer.Sound('gameoversoundeffect.mp3') #AS: Defines the crash sound using pygame's mixer.Sound class and an imported mp3 file
 start_time = None
 
-class Car:
-    def __init__(self, pygame):
-        self.sizey = 20
-        self.sizex = 50
-        self.position = pygame.Vector2(1075, 350)
-        self.shape = pygame.image.load('carnew.png')
-        self.image = self.shape
-        self.velocity = 0
-        self.acceleration = 0.006
-        self.rotation = 0
-        self.cornering = 0.4
-        self.topspeed = 2
-        
-    def update_position(self, math):
+class Car: #JV: Initializes a car class which can be used to create car objects 
+    def __init__(self, pygame): #JV: Initialization of the parts of the class
+        self.sizey = 20 #JV: A size in the vertical direction
+        self.sizex = 50 #JV: A size in the horizontal direction
+        self.position = pygame.Vector2(1075, 350) #JV: Establish a vector position
+        self.shape = pygame.image.load('carnew.png') #JV: Loads the attached image from the zip file
+        self.image = self.shape #JV: Creates a image that can be transformed without changing the original image
+        self.velocity = 0 #JV: Velocity of car at different times, starts at 0 because car doesn't move
+        self.acceleration = 0.006 #JV: The rate that the velocity goes up per tick of the code, many ticks per second so value is very small
+        self.rotation = 0 #JV: Current angle relative to horizontal of the car
+        self.cornering = 0.4 #JV: Amount the cars rotation can change per tick, in degrees.
+        self.topspeed = 2 #JV: Maximum speed the car can hit
+
+    #JV: Note: Code did not behave as expected initially because when I wrote it in my environment, point (0,0) was bottom left
+    #JV: Cont: For the code written by other members it was the top left
+    #JV: Cont: This resulted in weird results where in order to increase velocity we need to actually decrease it etc.
+    #JV: Cont: Basically, I just inverted all of the statements until it worked
+    def update_position(self, math): #JV: Function for updating position of the car based on the velocity and rotation. Uses trig. to determine cars position
         self.position = pygame.Vector2(self.position.x + (math.sin(math.radians(self.rotation)))*self.velocity, self.position.y + (math.cos(math.radians(self.rotation))*self.velocity))
-    def update_rotation_left(self):
+    def update_rotation_left(self): #JV: Player choose to go left, so angle responds accordingly
         self.rotation += self.cornering
-    def update_rotation_right(self):
+    def update_rotation_right(self): #JV: Player choose to go right, so angle responds accordingly
         self.rotation -= self.cornering
-    def goforwardvelocity(self):
+    def goforwardvelocity(self): #JV: Player goes forward which changes the velocity as long as its less than the top speed
         if self.velocity >= self.topspeed*(-1):
             self.velocity -= self.acceleration
-    def gobackwardvelocity(self):
+    def gobackwardvelocity(self): #JV: Player goes backward, velocity is changed as long as not going backward faster than top speed
         if self.velocity <= self.topspeed:
             self.velocity += self.acceleration
-    def update_image(self, math, pygame):
+    def update_image(self, math, pygame): #JV: Blits to the screen a copy of the the current positon (image) of the car.
         self.update_position(math)
         image = pygame.transform.rotate(self.image, self.rotation)
         screen.blit(image, self.position)
                     
-n = Car(pygame)
+n = Car(pygame) #JV: Initializes a car object for the player
 
 def start_count_down():
-    count_down_messages = ["3", "2", "1", "Go!"]
-    for number in count_down_messages:
-        screen.blit(track_image, (0, 0))  
-        text = font.render(number, True, WHITE)  
-        screen.blit(text, (600,325)) 
-        pygame.display.update()  
-        time.sleep(1)  
+    count_down_messages = ["3", "2", "1", "Go!"] #AS: A homogenous string list is defined as to a variable name (this list includes the text that will show on the screen during the countdown)
+    for number in count_down_messages: #AS: Consists of a for loop that goes through each item within the list
+        screen.blit(track_image, (0, 0)) #AS: This will display the track image through each iteration 
+        text = font.render(number, True, WHITE) #AS: Here a variable is set to a specific font (font was established earlier in the program), and the established tuple, WHITE. The eterated values are to be set as arguments within the render function as well.  
+        screen.blit(text, (600,325)) #AS: This allows the text variable above to be postioned and surfaced onto the screen, using a specific position tuple as an argment.
+        pygame.display.update() #AS: Updates the display every iteration. 
+        time.sleep(1) #AS: Pauses the loop for a second between each iteration, allowing the coundown to flow smoothly. 
 global times_list
-times_list = [0]   
+times_list = [0]  #JV: Initially there are no times, but needs some text to print or there will be an error, hence: 0
 
-def display_timer(carobject, lap, moved, start_time):
-    if start_time is not None:
-        elapsed_time = time.time() - start_time
-        minutes = int(elapsed_time) // 60
+def display_timer(carobject, lap, moved, start_time): #JV: Defines a function with required parameters
+    if start_time is not None: #JV: Insuring the game has started
+        elapsed_time = time.time() - start_time #JV: Time of start minus the current time represents the elapsed time
+        minutes = int(elapsed_time) // 60 #JV: If time is > 60, will need to be split into minutes and seconds
         seconds = int(elapsed_time) % 60
-        timer_text = f"{minutes:02}:{seconds:02}"
-        text = small_font.render(timer_text, True, WHITE)
-        screen.blit(text, (20, 20))
-        x,y = carobject.position
-        if int(x) > 1000 and int(x) < 1150 and int(y) == 350 and moved:
-            if times_list[0] == 0:
-                times_list[0] = elapsed_time
-            times_list.append(elapsed_time)
-            start_time = time.time()
-            lap += 1
-            moved = False
-        lap_text = small_font.render('LAP: ' + str(lap), True, WHITE)
-        screen.blit(lap_text, (1050, 10))
-        w = min(times_list)
-        w = ("%.2f" % w)
-        w = str(w)
-        w = w.split('.')
-        if w[0] == 0:
+        timer_text = f"{minutes:02}:{seconds:02}" 
+        text = small_font.render(timer_text, True, WHITE) #JV: Renders the text with font on the screen for the timer
+        screen.blit(text, (20, 20)) #JV: Blits it to the screen
+        x,y = carobject.position #JV: Takes the x,y position of the car currently 
+        if int(x) > 1000 and int(x) < 1150 and int(y) == 350 and moved: #JV: If car is currently at the start line and has moved since the last it was there
+            if times_list[0] == 0: #JV: Times list was initialized with a 0, if it still contains it, remove it and put the new time at its index
+                times_list[0] = elapsed_time #JV: If 0 stays, it will always be the quickest lap, must be removed
+            times_list.append(elapsed_time) #JV: if not 0, just append it to the list
+            start_time = time.time() #JV: Redefine start time as now for future laps
+            lap += 1 #JV: Increment laps
+            moved = False #JV: The car has not moved since the last time it was at the start, so False. When it moves again it will be set to true
+        lap_text = small_font.render('LAP: ' + str(lap), True, WHITE) #JV: Display the text of the current lap
+        screen.blit(lap_text, (1050, 10)) #JV: Blits it to the screen
+        w = min(times_list) #JV: Finds the minimum/best lap time
+        w = ("%.2f" % w) #JV: Formats it to 2 decimal places
+        w = str(w) #JV: Turns into a str so it can be printed
+        w = w.split('.') #JV: Remove the period and split it into a list
+        if w[0] == 0: #JV: Only pertinent for 1st lap, just reformates the 0 for the first lap
             w = ['0','00']
-        output = 'Best LAP: ' + str(w[0])+':'+ str(w[1])
-        best_text = small_font.render(output, True, WHITE)
-        screen.blit(best_text, (790, 50))
-        return lap, moved, start_time
+        output = 'Best LAP: ' + str(w[0])+':'+ str(w[1]) #JV: Creates a str for output, format is "seconds" + ":" + "milliseconds".
+        best_text = small_font.render(output, True, WHITE) #JV: Renders the text 
+        screen.blit(best_text, (790, 50)) #JV: Blits it to the screen
+        return lap, moved, start_time #JV: Returns information needed for future loops of this function, will be repassed through every time. 
         
-pause_menu_option_y_positions = [360, 420]
+pause_menu_option_y_positions = [360, 420] # SC: Provided a list with two different y positions for the pause menu options, and will be accessed throughout the pause menu function. 
 
 def pause_menu():
-    selected_option = 0 
-    paused = True 
+    selected_option = 0  # SC: Initalizes the selected option on 0 (in this case it would be Resume)
+    paused = True # SC: If true, runs the while loop below
     while paused:
-        for event in pygame.event.get(): 
-            if event.type == pygame.KEYDOWN: 
-                if event.key == pygame.K_w: 
-                    selected_option = (selected_option - 1) % 3 
-                elif event.key == pygame.K_s: 
-                    selected_option = (selected_option + 1) % 3 
-                elif event.key == pygame.K_RETURN: 
-                    if selected_option == 0: 
+        for event in pygame.event.get(): # SC: Acts as a for loop within the while paused loop, in short --> checks for inputs from the player
+            if event.type == pygame.KEYDOWN: # SC: Only computes for keyboard inputs
+                if event.key == pygame.K_w: # SC: If the player presses the 'w' key...
+                    selected_option = (selected_option - 1) % 3 # SC: If the w key is pressed, the selected option will move up (purpose of outputing the remainder value between 3 (the len of options) allows players to go from the top selection to the bottom using 'w' for example).
+                elif event.key == pygame.K_s:  # SC: If the player presses on the 's' key...
+                    selected_option = (selected_option + 1) % 3 # SC: If the s key is pressed, the selected option will move down. 
+                elif event.key == pygame.K_RETURN: # SC: If the player presses on the 'return' or 'enter' key...
+                    if selected_option == 0:  # SC: If the player hits the "Resume" value, paused value is set to False, removing the surfaced pause menu screen and returning back to the game.
                         paused = False
-                    elif selected_option == 1: 
+                    elif selected_option == 1: # SC: If the player hits the "Quit" value, the program shuts down, exiting out of the game. 
                         pygame.quit()
                         sys.exit()
 
-        pause_menu_image = pygame.image.load('pausemenuimage.png') 
-        pause_menu_image = pygame.transform.scale(pause_menu_image, (1280, 720)) 
-        screen.blit(pause_menu_image, (0,0)) 
-        title = font.render("Paused", True, WHITE) 
-        screen.blit(title, (455, 240)) 
+        pause_menu_image = pygame.image.load('pausemenuimage.png') # SC: This loads the pause menu background image, initially provided as a png file. 
+        pause_menu_image = pygame.transform.scale(pause_menu_image, (1280, 720)) # SC: This transforms the loaded surface object (the background image) and transforms it into specified dimensions. 
+        screen.blit(pause_menu_image, (0,0))  # SC: Displays the background image into the screen
+        title = font.render("Paused", True, WHITE) # SC: Defines a variable to the string value and makes it white.
+        screen.blit(title, (455, 240))  # SC: Positions and displays the title onto the paused screen. 
         
-        i = 0 
-        for option in pause_screen_options: 
-            if i == selected_option: 
-                if i == 0: 
+        i = 0 # SC: Initalizes the variable i as 0 outside of the loop below.
+        for option in pause_screen_options: # SC: A for loop that goes through the pause_screen_options list
+            if i == selected_option: # SC: If the player is on a selected option, the option will be displayed as a defined colour. 
+                if i == 0: # SC: If the player is on "Resume" the text will appear green.
                     colour = GREEN
-                elif i == 1: 
+                elif i == 1: # SC: If the player is on "Quit" the text will appear red. 
                     colour = RED
-            else: 
+            else: # SC: Every other option that is not being selected at that point in time will be displayed as white. 
                 colour = WHITE 
-            text = small_font.render(option, True, colour) 
-            screen.blit(text, (540, pause_menu_option_y_positions[i])) 
+            text = small_font.render(option, True, colour) # SC: Defines the text to be a specific font and colour.
+            screen.blit(text, (540, pause_menu_option_y_positions[i])) # SC: Displays the changes to the text using specified positions.
             
-            i += 1 
+            i += 1  # SC: Iterioate current value of iterates.
             
+
         pygame.display.update() 
          
 def gameover_menu(): #N.L - A function that draws and codes functionality of the gameover screen, and has no arguments since it just needs to be called to show up 
@@ -160,6 +168,9 @@ def gameover_menu(): #N.L - A function that draws and codes functionality of the
                     if event.key == pygame.K_RETURN: #N.L - If the key pressed was "Enter" or "Return", then it will...
                         pygame.quit() #N.L - It will close PyGame, since we iniitalized it in the beginning it needs to be quit
                         sys.exit() #N.L - It will close the program and closes everything properly so when the user hits enter on the "Quit" button (defined below), it will close
+
+        pygame.display.update() # SC: Updates the display every iteration.
+
         
         background_image = pygame.image.load('demo_car.png') #N.L - Load the image, which in this case is the gameover "car crash" picture using PyGame's image load function
         background_image = pygame.transform.scale(background_image, (1280, 720)) #N.L - Uses PyGame's scaling functionality to make the image fit the screen properly 
@@ -175,6 +186,7 @@ def gameover_menu(): #N.L - A function that draws and codes functionality of the
         
 
 menu_option_y_positions = [150, 210, 270] 
+
 def draw_menu(selected_option): 
     background_image = pygame.image.load('test10car.png') 
     background_image = pygame.transform.scale(background_image, (1280,720)) 
@@ -186,27 +198,47 @@ def draw_menu(selected_option):
     for option in menu_options:
         if i == selected_option:   
             if i == 2: 
-                colour = RED
-            else: 
-                colour = GREEN 
-        else: 
-            colour = WHITE
-        if option == "Audio": 
-            if music_playing: 
-                option = "Audio: On" 
-            else:
-                option = "Audio: Off"   
-                
-        text = small_font.render(option, True, colour) 
-        screen.blit(text, (460, menu_option_y_positions[i])) 
-        
-        i += 1 
 
+def draw_menu(selected_option):
+    background_image = pygame.image.load('test10car.png') # SC: Sets the background image of the main menu through the loading of a png file (by creating the png into a usable surface object).
+    background_image = pygame.transform.scale(background_image, (1280,720)) #SC: Tranforms the background image to specified dimensions.
+    screen.blit(background_image, (0, 0))  #SC: Displays the background image.
+    title = font.render("Proton Racing", True, WHITE) # SC: Renders the title of the game in a white colour and specific font (*not mentioned in other render functions --> True boolian argument allows for antialias; smoothes the edges of images and reduces distortion).
+    screen.blit(title, (250, 50)) #SC: Displays the title at specified positioning.
+    i = 0 # SC: Initalizes the variable i as 0 outside of the loop below.
+    for option in menu_options: # SC: A for loop that goes through the menu_options list.
+        if i == selected_option: # SC: If the player is on a selected option, the option will be displayed as a defined colour. 
+            if i == 2: # SC: If the player is on the option "Quit" then the text will turn red.
+
+                colour = RED
+            else: # SC: If the player is on any other option the text will turn green.
+                colour = GREEN 
+        else: # SC: Any other options (that the player is not on), will appear white. 
+            colour = WHITE
+        if option == "Audio": # SC: In the for loop, if the user selects "Audio" in the list of menu options, then ...
+            if music_playing: # SC: Check if music_playing boolean is true (aka if True)
+                option = "Audio: On"  # SC: If option in the for loop is 1, for example, it will make it equal to "Audio: On" 
+            else:
+                option = "Audio: Off"   # SC: If option in the for loop is 2, for example, it will make it equal to "Audio: Off"  
+                
+        text = small_font.render(option, True, colour) # SC: Set a variable text by using PyGame render function (previously talked about)
+        screen.blit(text, (460, menu_option_y_positions[i]))  # SC: Make the text appear on screen by blitting, and the i iteration makes each option i (Play, Audio, Quit) appear on screen with a given position (defined the list above)
+        
+        i += 1 # SC: Mentioned above
+
+ 
     if music_playing: 
         screen.blit(speaker_on_image, (speaker_icon_x, speaker_icon_y)) 
     else:
-        screen.blit(speaker_off_image, (speaker_icon_x, speaker_icon_y)) 
-    pygame.display.update() 
+        screen.blit(speaker_off_image, (speaker_icon_x, speaker_icon_y)) # 
+    pygame.display.update()  
+
+    if music_playing: # SC: Set as a boolean, (aka if True)
+        screen.blit(speaker_on_image, (speaker_icon_x, speaker_icon_y)) # SC: Blit image on screen, make a speaker_on png to appear with a respective position
+    else: # SC: aka if False
+        screen.blit(speaker_off_image, (speaker_icon_x, speaker_icon_y)) # SC: Blit image on screen, make a speaker_off png to appear with a respective position
+    pygame.display.update() # SC: Update the screen with the draw_menu variables and text, etc. 
+
 
 def main():
     global music_playing  
@@ -254,10 +286,10 @@ def main():
                         def render_objects(lap, moved, start_time): 
                             screen.blit(track_image, (0, 0)) 
                             Car.update_image(n, math, pygame)
-                            a = display_timer(n, lap, moved, start_time)
-                            lap = a
-                            pygame.display.update() 
-                            return lap
+                            a = display_timer(n, lap, moved, start_time) #JV: n is the car object, lap is the current lap, moved is whether the car has moved
+                            lap = a #JV: Sets lap to return of display_timer to see if lap has changed
+                            pygame.display.update() #JV: Prints to screen all rendered/blitted stuff throughout the code
+                            return lap #Returns lap for running throughout the loop
                             
 
                         def run_game(lap, carobject): 
@@ -288,9 +320,9 @@ def main():
                                 if keys[pygame.K_d]:
                                     Car.update_rotation_right(n)
                                  
-                                x, y = carobject.position
-                                if int(x) < 1000 or int(x) > 1150 and int(y) != 350:
-                                    moved = True
+                                x, y = carobject.position #JV: Takes the cars position
+                                if int(x) < 1000 or int(x) > 1150 and int(y) != 350: #JV: Sees if the car has moved
+                                    moved = True #JV: Car has moved, so set moved = True
                                 
                                 if not is_on_track(n):
                                     crash_sound.play()
@@ -298,7 +330,7 @@ def main():
                                     game_running = False 
                                     gameover_menu()
                                 
-                                lap, moved, start_time = render_objects(lap, moved, start_time) 
+                                lap, moved, start_time = render_objects(lap, moved, start_time) #JV: Passes in lap, moved, and start_time, and will return them if they have changed
                                 
                                 pygame.display.flip() 
                                 
