@@ -153,7 +153,7 @@ def pause_menu():
             text = small_font.render(option, True, colour) # SC: Defines the text to be a specific font and colour.
             screen.blit(text, (540, pause_menu_option_y_positions[i])) # SC: Displays the changes to the text using specified positions.
             
-            i += 1  # SC: Iterioate current value of iterates.
+            i += 1  # SC: Iterates current value of i.
             
 
         pygame.display.update() 
