@@ -183,7 +183,7 @@ def gameover_menu(): #N.L - A function that draws and codes functionality of the
         pygame.display.update() #N.L - Call this function to ensure that when this appears, make the display of the game update such as blits (ensures everything is up-to-date in a sense)
         
 
-menu_option_y_positions = [150, 210, 270] # SC: Provided a list with three different y positions for the pause menu options, and will be accessed throughout the main menu function. 
+menu_option_y_positions = [150, 210, 270] 
 
 def draw_menu(selected_option):
     background_image = pygame.image.load('test10car.png') # SC: Sets the background image of the main menu through the loading of a png file (by creating the png into a usable surface object).
@@ -207,10 +207,16 @@ def draw_menu(selected_option):
             else:
                 option = "Audio: Off"   # SC: If option in the for loop is 2, for example, it will make it equal to "Audio: Off"  
                 
-        text = small_font.render(option, True, colour) # SC: Set a variable text by using PyGame render function (previously talked about)
-        screen.blit(text, (460, menu_option_y_positions[i]))  # SC: Make the text appear on screen by blitting, and the i iteration makes each option i (Play, Audio, Quit) appear on screen with a given position (defined the list above)
+        text = smalt, (460, menu_option_y_positions[i]))  # SC: Make the text appear on screen by blitting, and the i iteration makes each option i (Play, Audio, Quit) appear on screen with a given position (defined the list above)
         
         i += 1 # SC: Mentioned above
+
+ 
+    if music_playing: 
+        screen.blit(speaker_on_image, (speaker_icon_x, speaker_icon_y)) 
+    else:
+        screen.blit(speaker_off_image, (speaker_icon_x, speaker_icon_y)) # 
+    pygame.display.update()  
 
     if music_playing: # SC: Set as a boolean, (aka if True)
         screen.blit(speaker_on_image, (speaker_icon_x, speaker_icon_y)) # SC: Blit image on screen, make a speaker_on png to appear with a respective position
@@ -226,7 +232,8 @@ def main():
     clock = pygame.time.Clock()
     
     pygame.mixer.init()
-    
+    l_font.render(option, True, colour) # SC: Set a variable text by using PyGame render function (previously talked about)
+        screen.blit(tex
     pygame.mixer.music.load('backgroundmusictest.mp3')  
     pygame.mixer.music.play(-1, 0.0)  
     lap = 0
@@ -278,28 +285,29 @@ def main():
                             global start_time
                             start_time = time.time()
 
-                            while game_running: 
-                                for event in pygame.event.get(): 
-                                    if event.type == pygame.QUIT: 
+                            while game_running: #JV: Continuously loops through the game loop while the game is running
+                                for event in pygame.event.get(): #JV: Loops through all the events that occured
+                                    if event.type == pygame.QUIT: #JV: If the tab is closed, stop the code from running, otherwise will run forever
                                         game_running = False
-                                    if event.type == pygame.KEYDOWN:
-                                        if event.key == pygame.K_ESCAPE: 
+                                    if event.type == pygame.KEYDOWN: 
+                                        if event.key == pygame.K_ESCAPE: #JV: If key pressed is escape run the pause_menu() function
                                             pause_menu() 
                                             
-                                keys = pygame.key.get_pressed()
-                                if keys[pygame.K_w]:
-                                    Car.goforwardvelocity(n)
+                                keys = pygame.key.get_pressed() #JV: Takes in input from pygame as to what keys the user pressed
+                                if keys[pygame.K_w]: #JV: Checks if they pressed w for go forward
+                                    Car.goforwardvelocity(n) #JV: Runs the corresponding velocity function
                                   
-                                if keys[pygame.K_s]:
-                                    Car.gobackwardvelocity(n)
+                                if keys[pygame.K_s]: #JV: Checks if they pressed s for go backward
+                                    Car.gobackwardvelocity(n)  #JV: Runs the corresponding velocity function
                                     
-                                if keys[pygame.K_a]:
-                                    Car.update_rotation_left(n)
+                                if keys[pygame.K_a]: #JV: Checks if they pressed a for go left
+                                    Car.update_rotation_left(n) #JV: Runs the corresponding rotation function
                                    
-                                if keys[pygame.K_d]:
-                                    Car.update_rotation_right(n)
+                                if keys[pygame.K_d]: #JV: Checks if they pressed d for go right
+                                    Car.update_rotation_right(n) #JV: Runs the corresponding rotation function
                                  
                                 x, y = carobject.position #JV: Takes the cars position
+                  
                                 if int(x) < 1000 or int(x) > 1150 and int(y) != 350: #JV: Sees if the car has moved
                                     moved = True #JV: Car has moved, so set moved = True
                                 
