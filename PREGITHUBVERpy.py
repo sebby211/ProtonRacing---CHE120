@@ -14,9 +14,9 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 
-font = pygame.font.Font('supfont.ttf', 90) #AS: The variable is set to a function with the parameters of a given TrueType file and size (this will be the larger sized font)
+font = pygame.font.Font('textfont.ttf', 90) #AS: The variable is set to a function with the parameters of a given TrueType file and size (this will be the larger sized font)
  
-small_font = pygame.font.Font('supfont.ttf', 50) #AS: The variable is set to a function with the parameters of a given TrueType file and size (this will be the smaller sized font)
+small_font = pygame.font.Font('textfont.ttf', 50) #AS: The variable is set to a function with the parameters of a given TrueType file and size (this will be the smaller sized font)
 
 menu_options = ["Start Game", "Audio", "Quit"] #AS: Establishes a variable name with a list of string values to be used in the main menu screen
 pause_screen_options = ["Resume", "Quit"] #AS: Establishes a variable name with a list of string values to be used in the pause menu screen
